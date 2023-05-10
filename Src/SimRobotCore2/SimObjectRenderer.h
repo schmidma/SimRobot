@@ -8,6 +8,7 @@
 
 #include "SimRobotCore2.h"
 #include "Tools/Math/Eigen.h"
+#include "Tools/Math/Pose3f.h"
 
 class SimObject;
 class Body;

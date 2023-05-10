@@ -1,0 +1,49 @@
+app-id: org.BHuman.SimRobot
+runtime: org.kde.Platform
+runtime-version: "6.4"
+sdk: org.kde.Sdk
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --filesystem=host
+  - --device=dri
+command: SimRobot
+modules:
+  - name: Box2D
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DBOX2D_BUILD_UNIT_TESTS=OFF
+      - -DBOX2D_BUILD_TESTBED=OFF
+      - -DBUILD_SHARED_LIBS=ON
+    sources:
+      - type: archive
+        url: https://github.com/erincatto/box2d/archive/refs/tags/v2.4.1.tar.gz
+        sha256: d6b4650ff897ee1ead27cf77a5933ea197cbeef6705638dd181adc2e816b23c2
+  - name: Eigen3
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: archive
+        url: https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz
+        sha256: 8586084f71f9bde545ee7fa6d00288b264a2b7ac3607b974e54d13e7162c1c72
+  - name: ODE
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DODE_WITH_DEMOS=OFF
+      - -DODE_WITH_TESTS=OFF
+    sources:
+      - type: archive
+        url: https://bitbucket.org/odedevs/ode/downloads/ode-0.16.3.tar.gz
+        sha256: c741dbf49bfc468ce2964824e5bc3f906ea956b1ae3594c50d351c383f03c413
+  - name: SimRobot
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: dir
+        path: ../

@@ -509,10 +509,18 @@ bool MainWindow::loadModule(const QString& name, bool manually)
 #elif defined MACOS
   QString moduleName = QFileInfo(application->getAppPath()).dir().path() + "/../lib/" + name;
 #else
-  QString moduleName = QFileInfo(appPath).path() + "/lib" + name + ".so";
+  QString moduleName = QFileInfo(appPath).path() + "/" + name;
 #endif
+  std::cout << "trying: " << moduleName.toStdString() << std::endl;
+  LoadedModule* loadedModule = new LoadedModule(moduleName);
+  if (!loadedModule->load()) {
+  std::cout << loadedModule->errorString().toStdString() << std::endl;
+    loadedModule->unload();
+    delete loadedModule;
+    loadedModule = new LoadedModule(name);
+  std::cout << "falling back: " << name.toStdString() << std::endl;
+  }
   {
-    LoadedModule* loadedModule = new LoadedModule(moduleName);
     loadedModule->createModule = reinterpret_cast<LoadedModule::CreateModuleProc>(loadedModule->resolve("createModule"));
     if(!loadedModule->createModule)
     {
